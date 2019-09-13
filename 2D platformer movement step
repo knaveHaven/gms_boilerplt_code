@@ -1,0 +1,17 @@
+///initialize playerstate
+
+
+spd = 4;
+step = 20;
+
+vspd = 0;
+hspd = 0;
+jspd = 12;
+
+
+
+//gravity
+
+grav = 1;
+
+state = move_state;
