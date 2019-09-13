@@ -1,0 +1,133 @@
+///move_state()
+
+var rkey = keyboard_check(vk_right);
+var lkey = keyboard_check(vk_left);
+var jkey = keyboard_check(vk_space);
+var dkey = keyboard_check(vk_down);
+var ukey = keyboard_check(vk_up);
+
+
+
+//check if on ground
+if(place_meeting(x,y+1,Solid))
+{
+    vspd = 0;
+    
+    
+    //jumping code
+    if(jkey)
+    {
+        vspd = -jspd;
+    }
+
+}
+else
+{
+    //gravity
+    if(vspd < 10 )
+    {
+    
+    vspd+= grav;
+    
+    }
+
+}
+
+
+
+
+//moving right
+
+if(rkey)
+{
+
+    hspd = spd;
+
+}
+
+//move left
+if(lkey)
+{
+
+    hspd = -spd;
+
+}
+
+
+
+if(hspd != 0)
+{
+    image_xscale = sign(hspd);
+}
+
+//check for not moving
+if((!rkey && !lkey) or (rkey && lkey))
+{
+
+    hspd = 0;
+
+}
+
+
+
+//horizontal collisons
+
+if(place_meeting(x+hspd,y,Solid))
+{
+    yplus = 0;
+    while(place_meeting(x+hspd,y-yplus,Solid) && yplus <= abs(1*hspd)) yplus += 1;
+    if(place_meeting(x+hspd,y-yplus,Solid))
+    {
+        while(!place_meeting(x+sign(hspd),y,Solid)) x+= sign(hspd);
+        hspd = 0;
+    }
+    else
+    {
+        y -= yplus;
+    }
+
+}
+x += hspd;
+//move horizontally
+
+if !place_meeting(x,y,Solid) && vspd >= 0 && place_meeting(x,y+2+abs(hspd),Solid)
+{
+    while(!place_meeting(x,y+1,Solid))
+    {
+        y += 1;
+    }
+}
+
+
+//vertical collisions
+if(place_meeting(x,y+vspd,Solid))
+{
+    while(!place_meeting(x,y+sign(vspd),Solid))
+    {
+        y+= sign(vspd);
+    }
+    vspd = 0;
+
+}
+
+
+
+y += vspd;
+
+
+
+//move vertically
+
+///check for ledge grab state
+
+var falling = y-yprevious > 0 ;
+
+var wasnt_wall = !position_meeting(x+17, yprevious , Solid); //checks if theres no wall vertically down/are falling
+var is_wall = position_meeting(x+17, y ,Solid); //checks is there is a wall touching horizontally??
+
+if(falling && wasnt_wall && is_wall)
+{
+    state = ledge_grab_state;
+
+}
+
